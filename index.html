@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GitHub Globe</title>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
+  </head>
+  <body>
+    <script>
+      // Create a scene
+      var scene = new THREE.Scene();
+
+      // Create a camera
+      var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 5;
+
+      // Create a renderer
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Create a sphere
+      var geometry = new THREE.SphereGeometry(2, 32, 32);
+      var textureLoader = new THREE.TextureLoader();
+      var texture = textureLoader.load('https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg');
+      var material = new THREE.MeshBasicMaterial({ map: texture });
+      var sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+
+      // Create markers for data points
+      var data = [
+        {lat: 37.7749, lon: -122.4194},
+        {lat: 40.7128, lon: -74.0060},
+        {lat: 51.5074, lon: -0.1278},
+      ];
+
+      var markerGeometry = new THREE.SphereGeometry(0.05, 32, 32);
+      var markerMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      for (var i = 0; i < data.length; i++) {
+        var marker = new THREE.Mesh(markerGeometry, markerMaterial);
+        marker.position.setFromSphericalCoords(2, (90 - data[i].lat) * Math.PI / 180, (data[i].lon + 180) * Math.PI / 180);
+        sphere.add(marker);
+      }
+
+      // Animate the scene
+      function animate() {
+        requestAnimationFrame(animate);
+        sphere.rotation.y += 0.01;
+        renderer.render(scene, camera);
+      }
+      animate();
+    </script>
+  </body>
+</html>
