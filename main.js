@@ -1,6 +1,10 @@
 const Globe = GlobeGl();
 
 const container = document.getElementById('globe');
+const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+scene.add(sphereMesh);
 
 const globe = new Globe(container, {
   baseColor: '#000',
